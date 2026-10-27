@@ -1,5 +1,95 @@
 {% extends "base.html" %}
+
 {% block content %}
+<style>
+    /* Container styling */
+    .panel {
+        max-width: 450px;
+        margin: 50px auto;
+        padding: 30px;
+        background-color: #ffffff;
+        border-radius: 12px;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .panel h1 {
+        text-align: center;
+        color: #333;
+        font-size: 26px;
+        margin-bottom: 25px;
+        margin-top: 0;
+    }
+
+    /* Form element alignment */
+    .stack {
+        display: flex;
+        flex-direction: column;
+        gap: 18px;
+    }
+
+    /* Label styling */
+    .stack label {
+        display: flex;
+        flex-direction: column;
+        font-weight: 600;
+        color: #444;
+        font-size: 14px;
+    }
+
+    /* Input fields rendered by Django {{ f }} */
+    .stack label input, 
+    .stack label select, 
+    .stack label textarea {
+        margin-top: 8px;
+        padding: 12px;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        font-size: 15px;
+        transition: all 0.3s ease;
+        background-color: #fcfcfc;
+    }
+
+    .stack label input:focus, 
+    .stack label select:focus, 
+    .stack label textarea:focus {
+        outline: none;
+        border-color: #007bff;
+        box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.15);
+        background-color: #ffffff;
+    }
+
+    /* Error message styling */
+    .err {
+        color: #d9534f;
+        font-size: 12px;
+        margin-top: 6px;
+        font-weight: normal;
+    }
+
+    /* Submit button styling */
+    .btn {
+        background-color: #007bff;
+        color: white;
+        padding: 14px;
+        border: none;
+        border-radius: 6px;
+        font-size: 16px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: background-color 0.3s ease, transform 0.1s ease;
+        margin-top: 10px;
+    }
+
+    .btn:hover {
+        background-color: #0056b3;
+    }
+
+    .btn:active {
+        transform: scale(0.98);
+    }
+</style>
+
 <div class="panel">
   <h1>Create an account</h1>
   <form method="post" class="stack">{% csrf_token %}
