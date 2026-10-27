@@ -1,0 +1,7 @@
+{% extends "base.html" %}
+{% block content %}
+<h1 class="page-h">Saved posts</h1>
+<div class="grid">{% for p in posts %}{% include "content/_card.html" %}{% empty %}
+  <div class="empty"><p>Nothing saved yet. Use Save on any post to keep it here.</p><a class="btn" href="{% url 'home' %}">Browse posts</a></div>
+{% endfor %}</div>
+{% endblock %}

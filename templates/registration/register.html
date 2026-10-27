@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="panel">
+  <h1>Create an account</h1>
+  <form method="post" class="stack">{% csrf_token %}
+    {% for f in form %}<label>{{ f.label }}{{ f }}{% for e in f.errors %}<small class="err">{{ e }}</small>{% endfor %}</label>{% endfor %}
+    <button class="btn" type="submit">Sign up</button>
+  </form>
+</div>
+{% endblock %}

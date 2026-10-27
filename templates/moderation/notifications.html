@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block content %}
+<h1 class="page-h">Alerts</h1>
+<div class="list">
+{% for n in items %}
+  <div class="row {% if not n.is_read %}unread{% endif %}">
+    <div>{% if n.post %}<a class="row-title" href="{{ n.post.get_absolute_url }}">{{ n.message }}</a>{% else %}{{ n.message }}{% endif %}</div>
+    <span class="by">{{ n.created_at|date:"j M, H:i" }}</span>
+  </div>
+{% empty %}<div class="empty"><p>No alerts yet. You'll hear about approvals, declines and comments here.</p></div>{% endfor %}
+</div>
+{% endblock %}

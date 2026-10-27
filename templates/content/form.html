@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="panel wide">
+  <h1>{{ title }}</h1>
+  <form method="post" class="stack">{% csrf_token %}
+    {% for f in form %}
+      <label>{{ f.label }}{{ f }}
+        {% if f.help_text %}<small class="muted">{{ f.help_text }}</small>{% endif %}
+        {% if f.name == 'body' %}<small class="muted"><span id="count">0</span> / 6000 characters</small>{% endif %}
+        {% for e in f.errors %}<small class="err">{{ e }}</small>{% endfor %}
+      </label>
+    {% endfor %}
+    <p class="muted">Posts from members are reviewed by an admin before they appear on the home page.</p>
+    <button class="btn" type="submit">{% if user.is_staff %}Publish{% else %}Submit for review{% endif %}</button>
+  </form>
+</div>
+{% endblock %}

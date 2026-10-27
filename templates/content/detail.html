@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}{{ post.title }}{% endblock %}
+{% block content %}
+<article class="read">
+  <div class="meta"><span class="tag {{ post.kind }}">{{ post.get_kind_display }}</span><span>{{ post.category }}</span>
+    {% if post.status != 'approved' %}<span class="badge {{ post.status }}">{{ post.get_status_display }}</span>{% endif %}</div>
+  <h1>{{ post.title }}</h1>
+  <div class="by">By {{ post.author.username }}{% if post.author.profile.department %}, {{ post.author.profile.department }}{% endif %} · {{ post.published_at|default:post.created_at|date:"j F Y" }}</div>
+  {% if post.tags.all %}<div class="tagrow">{% for t in post.tags.all %}<span class="tagchip">#{{ t.name }}</span>{% endfor %}</div>{% endif %}
+  <div class="body">{{ post.body|linebreaks }}</div>
+  {% if post.status == 'declined' and post.review_note %}<p class="note">Admin note: {{ post.review_note }}</p>{% endif %}
+  {% if post.status == 'approved' and user.is_authenticated %}
+  <div class="actions">
+    <button class="btn ghost" id="bm" data-url="{% url 'bookmark' post.pk %}">{% if saved %}Saved{% else %}Save{% endif %}</button>
+    <button class="btn ghost" id="report" data-url="{% url 'report' post.pk %}">Report</button>
+  </div>
+  {% endif %}
+  {% if post.status == 'approved' %}
+  <section class="comments">
+    <h2>{{ comments|length }} comment{{ comments|length|pluralize }}</h2>
+    {% for c in comments %}<div class="comment"><b>{{ c.user.username }}</b> <span class="muted">{{ c.created_at|date:"j M, H:i" }}</span><p>{{ c.body }}</p></div>
+    {% empty %}<p class="muted">No comments yet.</p>{% endfor %}
+    {% if user.is_authenticated %}
+    <form method="post" action="{% url 'comment' post.pk %}" class="stack">{% csrf_token %}{{ form.body }}<button class="btn small" type="submit">Post comment</button></form>
+    {% else %}<p><a href="{% url 'login' %}?next={{ request.path }}">Log in</a> to comment.</p>{% endif %}
+  </section>
+  {% endif %}
+  <p><a href="{% url 'home' %}">Back to all posts</a></p>
+</article>
+{% endblock %}

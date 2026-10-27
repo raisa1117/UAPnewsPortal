@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block content %}
+<h1 class="page-h">My posts</h1>
+<div class="list">
+{% for p in posts %}
+  <div class="row">
+    <div>
+      <a class="row-title" href="{{ p.get_absolute_url }}">{{ p.title }}</a>
+      <div class="by">{{ p.get_kind_display }} in {{ p.category }} · {{ p.created_at|date:"j M Y" }}</div>
+      {% if p.status == 'declined' and p.review_note %}<div class="note">Admin note: {{ p.review_note }}</div>{% endif %}
+    </div>
+    <div class="row-end"><span class="badge {{ p.status }}">{{ p.get_status_display }}</span><a href="{% url 'edit' p.pk %}">Edit</a></div>
+  </div>
+{% empty %}
+  <div class="empty"><p>You haven't written anything yet.</p><a class="btn" href="{% url 'create' %}">Write a post</a></div>
+{% endfor %}
+</div>
+{% endblock %}

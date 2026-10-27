@@ -1,0 +1,7 @@
+<article class="card" data-cat="{{ p.category_id }}" data-kind="{{ p.kind }}" data-text="{{ p.title|lower }} {{ p.body|lower|slice:':400' }}{% for t in p.tags.all %} {{ t.name }}{% endfor %}">
+  <div class="meta"><span class="tag {{ p.kind }}">{{ p.get_kind_display }}</span><span>{{ p.category }}</span></div>
+  <h3><a href="{{ p.get_absolute_url }}">{{ p.title }}</a></h3>
+  <p>{{ p.excerpt }}</p>
+  {% if p.tags.all %}<div class="tagrow">{% for t in p.tags.all %}<span class="tagchip">#{{ t.name }}</span>{% endfor %}</div>{% endif %}
+  <div class="by">{{ p.author.username }} · {{ p.published_at|default:p.created_at|date:"j M Y" }}</div>
+</article>

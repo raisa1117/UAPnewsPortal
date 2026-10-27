@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block content %}
+<h1 class="page-h">Review queue <span class="count" id="queue-count">{{ posts|length }}</span></h1>
+<div class="list" id="queue">
+{% for p in posts %}
+  <div class="review" data-id="{{ p.pk }}">
+    <div class="meta"><span class="tag {{ p.kind }}">{{ p.get_kind_display }}</span><span>{{ p.category }}</span><span>by {{ p.author.username }}</span></div>
+    <h3>{{ p.title }}</h3>
+    <details><summary>Read post</summary><div class="body">{{ p.body|linebreaks }}</div></details>
+    <div class="actions">
+      <button class="btn ok" data-action="approve" data-url="{% url 'review' p.pk 'approve' %}">Approve</button>
+      <button class="btn danger" data-action="decline" data-url="{% url 'review' p.pk 'decline' %}">Decline</button>
+    </div>
+  </div>
+{% endfor %}
+</div>
+<div class="empty" id="queue-empty" {% if posts %}hidden{% endif %}><p>All caught up. No posts are waiting for review.</p></div>
+
+<h2 class="page-h sub">Reported posts</h2>
+<div class="list">
+{% for r in reports %}
+  <div class="row" data-report>
+    <div><a class="row-title" href="{{ r.post.get_absolute_url }}">{{ r.post.title }}</a>
+      <div class="by">Reported by {{ r.reporter.username }}: {{ r.reason }}</div></div>
+    <button class="btn ghost" data-dismiss data-url="{% url 'dismiss_report' r.pk %}">Dismiss</button>
+  </div>
+{% empty %}<p class="muted">No open reports.</p>{% endfor %}
+</div>
+
+<h2 class="page-h sub">Recent decisions</h2>
+<div class="list">
+{% for l in logs %}<div class="row"><span>{{ l.reviewer.username|default:"Deleted user" }} {{ l.get_action_display|lower }} <b>{{ l.post.title }}</b></span><span class="by">{{ l.created_at|date:"j M, H:i" }}</span></div>
+{% empty %}<p class="muted">No decisions yet.</p>{% endfor %}
+</div>
+{% endblock %}

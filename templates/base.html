@@ -1,0 +1,38 @@
+{% load static %}<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{% block title %}UAP News & Blog Portal{% endblock %}</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Source+Sans+3:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{% static 'style.css' %}">
+<script>try{document.documentElement.dataset.theme=localStorage.getItem('theme')||'light'}catch(e){}</script>
+</head>
+<body>
+<header class="top">
+  <a class="brand" href="{% url 'home' %}"><span class="mark">UAP</span> News &amp; Blogs</a>
+  <nav>
+    <a href="{% url 'home' %}">Read</a>
+    {% if user.is_authenticated %}
+      <a href="{% url 'create' %}">Write</a>
+      <a href="{% url 'mine' %}">My posts</a>
+      <a href="{% url 'saved' %}">Saved</a>
+      <a href="{% url 'notifications' %}">Alerts{% if unread_count %} <span class="count">{{ unread_count }}</span>{% endif %}</a>
+      {% if user.is_staff %}<a href="{% url 'moderate' %}">Review{% if pending_count %} <span class="count" id="nav-count">{{ pending_count }}</span>{% endif %}</a>{% endif %}
+      <form method="post" action="{% url 'logout' %}" class="inline">{% csrf_token %}<button class="link">Log out ({{ user.username }})</button></form>
+    {% else %}
+      <a href="{% url 'login' %}">Log in</a>
+      <a class="btn small" href="{% url 'register' %}">Sign up</a>
+    {% endif %}
+    <button class="icon" id="theme" aria-label="Toggle dark mode" title="Toggle dark mode">◐</button>
+  </nav>
+</header>
+<main>
+  {% if messages %}{% for m in messages %}<div class="toast {{ m.tags }}">{{ m }}</div>{% endfor %}{% endif %}
+  {% block content %}{% endblock %}
+</main>
+<div id="toast-root" aria-live="polite"></div>
+<script src="{% static 'app.js' %}"></script>
+</body>
+</html>

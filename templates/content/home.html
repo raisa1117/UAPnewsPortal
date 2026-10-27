@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="hero">
+  <h1>What's happening at UAP, written by the people living it.</h1>
+  <input id="search" type="search" placeholder="Search stories, blogs and tags" aria-label="Search posts">
+</section>
+<div class="filters" id="filters">
+  <div class="chips" data-group="kind">
+    <button class="chip on" data-v="">All</button>
+    <button class="chip" data-v="news">News</button>
+    <button class="chip" data-v="blog">Blogs</button>
+  </div>
+  <div class="chips" data-group="cat">
+    <button class="chip on" data-v="">Every category</button>
+    {% for c in categories %}<button class="chip" data-v="{{ c.id }}">{{ c.name }}</button>{% endfor %}
+  </div>
+</div>
+<p class="muted" id="result-count"></p>
+<div class="grid" id="grid">
+  {% for p in posts %}{% include "content/_card.html" %}{% endfor %}
+</div>
+<div class="empty" id="empty" {% if posts %}hidden{% endif %}>
+  <p>Nothing matches yet.</p>
+  <a class="btn" href="{% url 'create' %}">Write the first one</a>
+</div>
+{% endblock %}
